@@ -137,6 +137,10 @@ export class TemplateSrv {
     this.grafanaVariables[name] = value;
   }
 
+  getGrafanaVariable(name) {
+    return this.grafanaVariables[name];
+  }
+
   getVariableName(expression) {
     this.regex.lastIndex = 0;
     var match = this.regex.exec(expression);

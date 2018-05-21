@@ -65,6 +65,8 @@ export class TimePickerCtrl {
     this.tooltip = this.dashboard.formatDate(time.from) + ' <br>to<br>';
     this.tooltip += this.dashboard.formatDate(time.to);
     this.timeRaw = timeRaw;
+    this.timeSrv.absoluteFromTime = this.absoluteFromChanged();
+    this.timeSrv.absoluteToTime = this.absoluteToChanged();
   }
 
   zoom(factor) {
@@ -130,11 +132,11 @@ export class TimePickerCtrl {
   }
 
   absoluteFromChanged() {
-    this.editTimeRaw.from = this.getAbsoluteMomentForTimezone(this.absolute.fromJs);
+    return moment(this.getAbsoluteMomentForTimezone(this.absolute.fromJs)).valueOf();
   }
 
   absoluteToChanged() {
-    this.editTimeRaw.to = this.getAbsoluteMomentForTimezone(this.absolute.toJs);
+    return moment(this.getAbsoluteMomentForTimezone(this.absolute.toJs)).valueOf();
   }
 
   getAbsoluteMomentForTimezone(jsDate) {

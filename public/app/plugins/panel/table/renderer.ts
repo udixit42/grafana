@@ -246,6 +246,8 @@ export class TableRenderer {
       // Render cell as link
       var scopedVars = this.renderRowVariables(rowIndex);
       scopedVars['__cell'] = { value: value };
+      scopedVars['__time_interval_start'] = { value: this.templateSrv.getGrafanaVariable('$__time_interval_start') };
+      scopedVars['__time_interval_end'] = { value: this.templateSrv.getGrafanaVariable('$__time_interval_end') };
 
       var cellLink = this.templateSrv.replace(column.style.linkUrl, scopedVars, encodeURIComponent);
       var cellLinkTooltip = this.templateSrv.replace(column.style.linkTooltip, scopedVars);
