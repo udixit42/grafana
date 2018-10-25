@@ -257,8 +257,27 @@ transformers['table'] = {
       return acc;
     }, []);
 
+    const compactedRowsSplit = compactedRows.reduce((acc, row, rowIndex) => {
+      let colNum = 0;
+      for (let columnIndex = 0; columnIndex < columnsUnion.length; columnIndex++) {
+        if (row[columnIndex].includes(',')) {
+          let _cols = row[columnIndex].split(',');
+          for (let _cols_ind = 0; _cols_ind < _cols.length; _cols_ind++) {
+            row.push(_cols[_cols_ind]);
+          }
+          if (colNum === 0) {
+            for (let _cols_ind = 0; _cols_ind < _cols.length; _cols_ind++) {
+              columnsUnion.push('cols_' + colNum);
+              colNum = colNum + 1;
+            }
+          }
+        }
+      }
+      acc.push(row);
+    }, []);
+
     model.columns = columnsUnion;
-    model.rows = compactedRows;
+    model.rows = compactedRowsSplit;
   },
 };
 
