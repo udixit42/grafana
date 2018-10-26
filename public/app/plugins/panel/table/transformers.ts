@@ -168,7 +168,7 @@ transformers['table'] = {
       };
     }
 
-    mergeTablesIntoModel(model, ...data);
+    model = mergeTablesIntoModel(model, ...data);
   },
 };
 

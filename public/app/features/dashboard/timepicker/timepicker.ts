@@ -67,7 +67,6 @@ export class TimePickerCtrl {
     this.tooltip = this.dashboard.formatDate(time.from) + ' <br>to<br>';
     this.tooltip += this.dashboard.formatDate(time.to);
     this.timeRaw = timeRaw;
-    this.isAbsolute = moment.isMoment(this.timeRaw.to);
   }
 
   zoom(factor) {
@@ -93,6 +92,8 @@ export class TimePickerCtrl {
       to = range.to.valueOf();
       from = range.from.valueOf();
     }
+    this.timeSrv.absoluteFromTime = moment.utc(from).valueOf();
+    this.timeSrv.absoluteToTime = moment.utc(to).valueOf();
 
     this.timeSrv.setTime({ from: moment.utc(from), to: moment.utc(to) });
   }
@@ -128,15 +129,20 @@ export class TimePickerCtrl {
       this.timeSrv.setAutoRefresh(this.refresh.value);
     }
 
+    this.timeSrv.absoluteFromTime = this.getAbsoluteMomentForTimezone(this.editTimeRaw.from.valueOf()).valueOf();
+    this.timeSrv.absoluteToTime = this.getAbsoluteMomentForTimezone(this.editTimeRaw.to.valueOf()).valueOf();
+
     this.timeSrv.setTime(this.editTimeRaw);
     this.closeDropdown();
   }
 
   absoluteFromChanged() {
+    //this.timeSrv.absoluteFromTime = this.getAbsoluteMomentForTimezone(this.absolute.fromJs).valueOf();
     this.editTimeRaw.from = this.getAbsoluteMomentForTimezone(this.absolute.fromJs);
   }
 
   absoluteToChanged() {
+    //this.timeSrv.absoluteToTime = this.getAbsoluteMomentForTimezone(this.absolute.toJs).valueOf();
     this.editTimeRaw.to = this.getAbsoluteMomentForTimezone(this.absolute.toJs);
   }
 
@@ -150,6 +156,9 @@ export class TimePickerCtrl {
     if (this.panel.nowDelay && range.to === 'now') {
       range.to = 'now-' + this.panel.nowDelay;
     }
+    console.log('relative filter from ' + String(range.from) + ' to ' + String(range.to));
+    this.timeSrv.absoluteFromTime = this.getAbsoluteMomentForTimezone(range.from).valueOf();
+    this.timeSrv.absoluteToTime = this.getAbsoluteMomentForTimezone(range.to).valueOf();
 
     this.timeSrv.setTime(range);
     this.closeDropdown();

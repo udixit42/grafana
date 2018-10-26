@@ -140,6 +140,10 @@ export class TemplateSrv {
     return variableName;
   }
 
+  getGrafanaVariable(name) {
+    return this.grafanaVariables[name];
+  }
+
   variableExists(expression) {
     const name = this.getVariableName(expression);
     return name && this.index[name] !== void 0;

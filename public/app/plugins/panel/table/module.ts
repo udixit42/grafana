@@ -116,7 +116,6 @@ class TablePanelCtrl extends MetricsPanelCtrl {
         }
       }
     }
-
     this.render();
   }
 

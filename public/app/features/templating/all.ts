@@ -10,6 +10,7 @@ import { CustomVariable } from './custom_variable';
 import { ConstantVariable } from './constant_variable';
 import { AdhocVariable } from './adhoc_variable';
 import { TextBoxVariable } from './TextBoxVariable';
+import { TimeVariable } from './time_variable';
 
 coreModule.factory('templateSrv', () => {
   return templateSrv;
@@ -24,4 +25,5 @@ export {
   ConstantVariable,
   AdhocVariable,
   TextBoxVariable,
+  TimeVariable,
 };
