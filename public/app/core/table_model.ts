@@ -6,6 +6,7 @@ interface Column {
   desc?: boolean;
   filterable?: boolean;
   unit?: string;
+  parentColIndex?: number;
 }
 
 export default class TableModel {

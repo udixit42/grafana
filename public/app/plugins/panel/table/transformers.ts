@@ -170,8 +170,32 @@ transformers['table'] = {
 
     // Single query returns data columns and rows as is
     if (data.length === 1) {
-      model.columns = [...data[0].columns];
-      model.rows = [...data[0].rows];
+      const columnsUnion = [...data[0].columns];
+      const compactedRows = [...data[0].rows];
+
+      const colLength = columnsUnion.length;
+      const compactSplitRows = [];
+      let colNum = 0;
+      compactedRows.forEach(row => {
+        for (let columnIndex = 0; columnIndex < colLength; columnIndex++) {
+          if (String(row[columnIndex]).indexOf(',') !== -1) {
+            const _cols = String(row[columnIndex]).split(',');
+            for (let colsInd = 0; colsInd < _cols.length; colsInd++) {
+              row.push(_cols[colsInd]);
+            }
+            if (colNum === 0) {
+              for (let colsInd = 0; colsInd < _cols.length; colsInd++) {
+                columnsUnion.push({ text: 'cols_' + String(colNum), filterable: true, parentColIndex: columnIndex });
+                colNum = colNum + 1;
+              }
+            }
+          }
+        }
+        compactSplitRows.push(row);
+      });
+
+      model.columns = columnsUnion;
+      model.rows = compactSplitRows;
       return;
     }
 

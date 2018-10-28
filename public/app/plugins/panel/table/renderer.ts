@@ -199,6 +199,8 @@ export class TableRenderer {
     for (let i = 0; i < row.length; i++) {
       cellVariable = `__cell_${i}`;
       scopedVars[cellVariable] = { value: row[i] };
+      scopedVars['__time_interval_start'] = { value: this.templateSrv.getGrafanaVariable('$__time_interval_start') };
+      scopedVars['__time_interval_end'] = { value: this.templateSrv.getGrafanaVariable('$__time_interval_end') };
     }
     return scopedVars;
   }
@@ -268,15 +270,27 @@ export class TableRenderer {
 
     if (column.filterable) {
       cellClasses.push('table-panel-cell-filterable');
-      columnHtml += `
-        <a class="table-panel-filter-link" data-link-tooltip data-original-title="Filter out value" data-placement="bottom"
-           data-row="${rowIndex}" data-column="${columnIndex}" data-operator="!=">
-          <i class="fa fa-search-minus"></i>
-        </a>
-        <a class="table-panel-filter-link" data-link-tooltip data-original-title="Filter for value" data-placement="bottom"
-           data-row="${rowIndex}" data-column="${columnIndex}" data-operator="=">
-          <i class="fa fa-search-plus"></i>
-        </a>`;
+      if (column.parentColIndex != null) {
+        columnHtml += `
+          <a class="table-panel-filter-link" data-link-tooltip data-original-title="Filter out value" data-placement="bottom"
+             data-row="${rowIndex}" data-column="${column.parentColIndex}" data-operator="!=">
+            <i class="fa fa-search-minus"></i>
+          </a>
+          <a class="table-panel-filter-link" data-link-tooltip data-original-title="Filter for value" data-placement="bottom"
+             data-row="${rowIndex}" data-column="${column.parentColIndex}" data-operator="=">
+            <i class="fa fa-search-plus"></i>
+          </a>`;
+      } else {
+        columnHtml += `
+          <a class="table-panel-filter-link" data-link-tooltip data-original-title="Filter out value" data-placement="bottom"
+             data-row="${rowIndex}" data-column="${columnIndex}" data-operator="!=">
+            <i class="fa fa-search-minus"></i>
+          </a>
+          <a class="table-panel-filter-link" data-link-tooltip data-original-title="Filter for value" data-placement="bottom"
+             data-row="${rowIndex}" data-column="${columnIndex}" data-operator="=">
+            <i class="fa fa-search-plus"></i>
+          </a>`;
+      }
     }
 
     if (cellClasses.length) {
